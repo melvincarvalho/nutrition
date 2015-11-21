@@ -95,9 +95,20 @@
 
             <div flex-container="row" flex-gutter="24">
               <div flex-item>
-                <lx-text-field label="What did you eat?">
+                <lx-text-field label="What did you consume?">
                   <input type="text" ng-model="nutrition">
                 </lx-text-field>
+
+                <lx-select ng-model="selects.food" placeholder="Select" choices="foods" floating-label>
+                    <lx-select-selected>
+                        {{ $selected.name }}
+                    </lx-select-selected>
+
+                    <lx-select-choices>
+                        {{ $choice.name }}
+                    </lx-select-choices>
+                </lx-select>
+
               </div>
             </div>
             <button ng-audio="audio/button-3.mp3" class="btn btn--m btn--blue btn--raised" lx-ripple lx-ripple aria-label="logout" ng-click="save()">

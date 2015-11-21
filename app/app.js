@@ -72,14 +72,24 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
 
 
   /**
-   * Init UI
-   */
+  * Init UI
+  */
   $scope.initUI = function() {
     $scope.initialized = true;
     $scope.loggedIn = false;
     $scope.loginTLSButtonText = "Login";
     $scope.audio = ngAudio.load('audio/button-3.mp3');
     $scope.inbox = defaultInbox;
+
+    $scope.foods = [
+      { name: 'Glass of water',      uri: 'urn:tmp:water',      calories: 10 },
+      { name: 'Sushi - como',      uri: 'urn:tmp:sushi-como',      calories: 200 },
+    ];
+
+    $scope.selects = {
+      selectedFood: undefined,
+    };
+
   };
 
 
@@ -183,9 +193,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   };
 
   /**
-   * Invalidate a cached URI
-   * @param  {String} uri The URI to invalidate
-   */
+  * Invalidate a cached URI
+  * @param  {String} uri The URI to invalidate
+  */
   $scope.invalidate = function(uri) {
     console.log('invalidate : ' + uri);
     f.unload(uri);
@@ -207,39 +217,22 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   };
 
   /**
-   * Save the nutrtion
-   */
+  * Save the nutrtion
+  */
   $scope.save = function() {
-    var nutrition = $scope.nutrition;
+    var nutrition = $scope.nutrition || $scope.selects.food.name;
     if (!nutrition) {
       LxNotificationService.error('nutrition is empty');
       return;
     }
     console.log(nutrition);
 
-    $http({
-      method: 'POST',
-      url: $scope.inbox,
-      withCredentials: true,
-      headers: {
-        "Content-Type": "text/turtle"
-      },
-      data: '<#this> '+ NUT('food') +' """' + $scope.nutrition + '""" .',
-    }).
-    success(function(data, status, headers) {
-      LxNotificationService.success('Meal saved');
-      $location.search('storageURI', $scope.inbox);
-    }).
-    error(function(data, status, headers) {
-      LxNotificationService.error('could not save nutrition');
-    });
 
-
-    var message = "Nutritoin: you consumed "+ $scope.nutrition +".";
+    var message = "#nutrition: you consumed "+ nutrition +".";
     var post = createPost($scope.user, message, doap);
 
-        console.log('writing to : ' + $scope.inbox);
-        console.log(post);
+    console.log('writing to : ' + $scope.inbox);
+    console.log(post);
     $http({
       method: 'POST',
       url: $scope.inbox,
@@ -277,12 +270,12 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   };
 
   /**
-   * create a post in turtle
-   * @param  {string} webid       the creator
-   * @param  {string} message     the message to send
-   * @param  {string} application application that created it
-   * @return {string}             the message in turtle
-   */
+  * create a post in turtle
+  * @param  {string} webid       the creator
+  * @param  {string} message     the message to send
+  * @param  {string} application application that created it
+  * @return {string}             the message in turtle
+  */
   function createPost(webid, message, application) {
     var turtle;
     turtle = '<#this> ';
@@ -308,8 +301,8 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   };
 
   /**
-   * Refresh 
-   */
+  * Refresh
+  */
   $scope.refresh = function() {
     $scope.render();
   };
@@ -332,18 +325,18 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   //
   //
   /**
-   * Get wss from URI
-   * @param  {String} uri The URI to use
-   */
+  * Get wss from URI
+  * @param  {String} uri The URI to use
+  */
   function getWss(uri) {
     return 'wss://' + uri.split('/')[2];
   }
 
   /**
-   * Connect to a web socket
-   * @param  {String}  sub Where to subscribe to
-   * @param  {boolean} quiet dont ping server
-   */
+  * Connect to a web socket
+  * @param  {String}  sub Where to subscribe to
+  * @param  {boolean} quiet dont ping server
+  */
   function connectToSocket(sub, quiet) {
     // Some servers time out after 5 minutes inactive
     var INTERVAL  = 240 * 1000;
@@ -388,9 +381,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   }
 
   /**
-   * Process message from socket
-   * @param  {String} uri uri that has changed
-   */
+  * Process message from socket
+  * @param  {String} uri uri that has changed
+  */
   function processSocket(uri) {
     console.log(uri);
 
@@ -405,8 +398,8 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
 });
 
 /**
- * Escape URIs filter
- */
+* Escape URIs filter
+*/
 App.filter('escape', function() {
   return window.encodeURIComponent;
 });
