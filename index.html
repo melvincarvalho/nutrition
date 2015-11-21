@@ -95,10 +95,6 @@
 
             <div flex-container="row" flex-gutter="24">
               <div flex-item>
-                <lx-text-field label="What did you consume?">
-                  <input type="text" ng-model="nutrition">
-                </lx-text-field>
-
                 <lx-select ng-model="selects.food" placeholder="Select" choices="foods" floating-label>
                     <lx-select-selected>
                         {{ $selected.name }}
@@ -108,6 +104,12 @@
                         {{ $choice.name }}
                     </lx-select-choices>
                 </lx-select>
+
+
+                <lx-text-field label="What did you consume?">
+                  <input type="text" ng-model="nutrition">
+                </lx-text-field>
+
 
               </div>
             </div>
