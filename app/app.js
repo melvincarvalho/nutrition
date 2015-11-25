@@ -229,7 +229,8 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
 
 
     var message = "#nutrition: you consumed "+ nutrition +".";
-    var post = createPost($scope.user, message, doap);
+    var img = 'https://melvincarvalho.github.io/nutrition/images/icon.png';
+    var post = createPost($scope.user, message, doap, img);
 
     console.log('writing to : ' + $scope.inbox);
     console.log(post);
@@ -274,9 +275,10 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   * @param  {string} webid       the creator
   * @param  {string} message     the message to send
   * @param  {string} application application that created it
+  * @param  {string} img         img for that post
   * @return {string}             the message in turtle
   */
-  function createPost(webid, message, application) {
+  function createPost(webid, message, application, img) {
     var turtle;
     turtle = '<#this> ';
     turtle += '    <http://purl.org/dc/terms/created> "'+ new Date().toISOString() +'"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;\n';
@@ -286,6 +288,10 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
 
     if (application) {
       turtle += '    <https://w3.org/ns/solid/app#application> <' + application + '> ;\n';
+    }
+
+    if (img) {
+      turtle += '    <http://xmlns.com/foaf/0.1/img> <' + img + '> ;\n';
     }
 
     turtle += '    <http://www.w3.org/ns/mblog#author> <'+ webid +'> .\n';
