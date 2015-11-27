@@ -41,7 +41,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   var f,g;
 
   var defaultStorageURI = 'https://nutrition.databox.me/Public/nutrition/test';
-  var doap = 'https://melvincarvalho.github.io/nutrition/doap.ttl';
+  var doap = 'https://melvincarvalho.github.io/nutrition/doap.ttl#this';
   var defaultInbox = 'https://melvin.databox.me/Public/inbox';
 
   // INIT
@@ -287,7 +287,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
     turtle += '    a <http://rdfs.org/sioc/ns#Post> ;\n';
 
     if (application) {
-      turtle += '    <https://w3.org/ns/solid/app#application> <' + application + '> ;\n';
+      turtle += '    <http://www.w3.org/ns/solid/app#application> <' + application + '> ;\n';
     }
 
     if (img) {
