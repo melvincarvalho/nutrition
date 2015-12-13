@@ -20,6 +20,9 @@
   "dependencies": {
     "lumx": "~0.3.39",
     "angular-ui": "~0.4.0",
-    "angular-audio": "~1.7.0"
+    "angular-audio": "~1.7.0",
+    "fullpage.js": "~2.7.6",
+    "fullpage": "~2.7.6",
+    "vis": "~4.10.0"
   }
 }
