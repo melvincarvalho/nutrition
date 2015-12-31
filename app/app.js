@@ -76,7 +76,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   */
   $scope.initUI = function() {
     $scope.initialized = true;
-    $scope.loggedIn = false;
+    $scope.loggedIn = true;
     $scope.loginTLSButtonText = "Login";
     $scope.audio = ngAudio.load('audio/button-3.mp3');
     $scope.inbox = defaultInbox;
