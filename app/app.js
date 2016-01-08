@@ -43,6 +43,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   var defaultStorageURI = 'https://nutrition.databox.me/Public/nutrition/test';
   var doap = 'https://melvincarvalho.github.io/nutrition/doap.ttl#this';
   var defaultInbox = 'https://melvin.databox.me/Public/inbox';
+  var defaultTimeline = 'https://melvin.databox.me/Public/timeline';
 
   // INIT
   /**
@@ -80,6 +81,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
     $scope.loginTLSButtonText = "Login";
     $scope.audio = ngAudio.load('audio/button-3.mp3');
     $scope.inbox = defaultInbox;
+    $scope.timeline = defaultTimeline;
 
     $scope.foods = [
       { "name" : "Aromatic Lamb Curry with a spiced rice & lentil pilaf Marks and Spencer", "uri" : "urn:tmp:0"},
@@ -323,7 +325,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
 
     var message = "#nutrition: you consumed "+ nutrition +".";
     var img = 'https://melvincarvalho.github.io/nutrition/images/icon.png';
-    var post = createPost($scope.user, message, doap, img);
+    var post = $scope.createPost($scope.user, message, doap, img, null, $scope.timeline);
 
     console.log('writing to : ' + $scope.inbox);
     console.log(post);
@@ -369,27 +371,38 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   * @param  {string} message     the message to send
   * @param  {string} application application that created it
   * @param  {string} img         img for that post
+  * @param  {string} reply       comment is a reply to
+  * @param  {string} timeline    timeline associated with post
   * @return {string}             the message in turtle
   */
-  function createPost(webid, message, application, img) {
+  $scope.createPost = function(webid, message, application, img, reply, timeline) {
     var turtle;
     turtle = '<#this> ';
     turtle += '    <http://purl.org/dc/terms/created> "'+ new Date().toISOString() +'"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;\n';
     turtle += '    <http://purl.org/dc/terms/creator> <' + webid + '> ;\n';
-    turtle += '    <http://rdfs.org/sioc/ns#content> "'+ message.trim() +'" ;\n';
+    turtle += '    <http://rdfs.org/sioc/ns#content> """'+ message.trim() +'""" ;\n';
     turtle += '    a <http://rdfs.org/sioc/ns#Post> ;\n';
 
     if (application) {
-      turtle += '    <http://www.w3.org/ns/solid/app#application> <' + application + '> ;\n';
+      turtle += '    <https://w3.org/ns/solid/app#application> <' + application + '> ;\n';
     }
 
     if (img) {
       turtle += '    <http://xmlns.com/foaf/0.1/img> <' + img + '> ;\n';
     }
 
+    if (reply) {
+      turtle += '    <http://rdfs.org/sioc/ns#reply_to> <' + reply + '> ;\n';
+    }
+
+    if (timeline) {
+      turtle += '    <http://www.w3.org/ns/solid/terms#timeline> <' + timeline + '> ;\n';
+    }
+
     turtle += '    <http://www.w3.org/ns/mblog#author> <'+ webid +'> .\n';
+
     return turtle;
-  }
+  };
 
 
   // RENDER
