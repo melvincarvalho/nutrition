@@ -36,6 +36,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   var RDFS  = $rdf.Namespace("http://www.w3.org/2000/01/rdf-schema#");
   var SIOC  = $rdf.Namespace("http://rdfs.org/sioc/ns#");
   var SOLID = $rdf.Namespace("http://www.w3.org/ns/solid/app#");
+  var ST    = $rdf.Namespace("http://www.w3.org/ns/solid/terms#");
   var TMP   = $rdf.Namespace("urn:tmp:");
 
   var f,g;
@@ -43,7 +44,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   var defaultStorageURI = 'https://nutrition.databox.me/Public/nutrition/test';
   var doap = 'https://melvincarvalho.github.io/nutrition/doap.ttl#this';
   var defaultInbox = 'https://melvin.databox.me/Public/inbox';
-  var defaultTimeline = 'https://melvin.databox.me/Public/timeline';
+  var defaultTimeline = 'https://melvin.databox.me/Public/timeline/';
 
   // INIT
   /**
